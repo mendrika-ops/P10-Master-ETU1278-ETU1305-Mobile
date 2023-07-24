@@ -32,9 +32,9 @@ public class MainActivity extends AppCompatActivity {
         top = AnimationUtils.loadAnimation(this, R.anim.animation_top);
 
         image = findViewById(R.id.imageView);
-
+        slogan = findViewById(R.id.slogan);
         image.setAnimation(top);
-
+        slogan.setAnimation(boutom);
         new Handler().postDelayed(()-> {
             Intent intent = new Intent(MainActivity.this, Login.class);
             startActivity(intent);
