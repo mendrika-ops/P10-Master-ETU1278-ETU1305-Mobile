@@ -18,7 +18,6 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.tongasoa.MyHome;
 import com.example.tongasoa.R;
@@ -26,35 +25,52 @@ import com.example.tongasoa.modele.User;
 import com.google.android.material.button.MaterialButton;
 import com.google.gson.Gson;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 
+public class Inscription extends AppCompatActivity {
 
-public class Login extends AppCompatActivity {
-    private User user;
-    ProgressBar loadingSpinner;
+    User user;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_inscription);
 
-        TextView email = (TextView) findViewById(R.id.username);
+        TextView name = (TextView) findViewById(R.id.name);
+        TextView firstname = (TextView) findViewById(R.id.firstname);
+        TextView email = (TextView) findViewById(R.id.email);
         TextView password = (TextView) findViewById(R.id.password);
+        TextView passwordValid = (TextView) findViewById(R.id.passwordValid);
 
         MaterialButton loginbtn = (MaterialButton) findViewById(R.id.loginbtn);
         ProgressBar loadingSpinner = findViewById(R.id.loading_spinner);
-
         loginbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                     loadingSpinner.setVisibility(View.VISIBLE);
                     loginbtn.setEnabled(false);
-
+                    Toast.makeText(Inscription.this, "inscription", Toast.LENGTH_SHORT).show();
+                    user = new User();
+                    user.setName(name.getText().toString());
+                    user.setFirstName(firstname.getText().toString());
+                    user.setEmail(email.getText().toString());
+                    user.setPassword(password.getText().toString());
+                    if(TextUtils.isEmpty(name.getText().toString())){
+                        name.setError("Name required");
+                        loadingSpinner.setVisibility(View.GONE);
+                        loginbtn.setEnabled(true);
+                        return;
+                    }
+                    if(TextUtils.isEmpty(firstname.getText().toString())){
+                        firstname.setError("Firstname required");
+                        loadingSpinner.setVisibility(View.GONE);
+                        loginbtn.setEnabled(true);
+                        return;
+                    }
                     if(TextUtils.isEmpty(email.getText().toString())|| !checkEmail(email.getText().toString())){
                         email.setError("Email required");
                         loadingSpinner.setVisibility(View.GONE);
@@ -73,30 +89,36 @@ public class Login extends AppCompatActivity {
                         loginbtn.setEnabled(true);
                         return;
                     }
+
+                    if(password.getText().toString().equals(passwordValid.getText().toString()) == false){
+                        passwordValid.setError("Password different of valid password");
+                        loadingSpinner.setVisibility(View.GONE);
+                        loginbtn.setEnabled(true);
+                        return;
+                    }
                     else {
-                        verifyLogin(email.getText().toString(), password.getText().toString());
-                        Log.e("api", "Login -- : " + user.getId());
+                        register(user);
+                        Log.e("api", "Inscription -- : " + user.getId());
                     }
                     new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            loadingSpinner.setVisibility(View.GONE);
-                            loginbtn.setEnabled(true);
-                        }
-                    }, 7000);
-                }
+                    @Override
+                    public void run() {
+                        loadingSpinner.setVisibility(View.GONE);
+                        loginbtn.setEnabled(true);
+                    }
+                }, 7000);
+            }
         });
 
         TextView signup = findViewById(R.id.signup);
         signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Login.this, Inscription.class);
+                Intent intent = new Intent(Inscription.this, Login.class);
                 startActivity(intent);
                 finish();
             }
         });
-
     }
 
     public static boolean checkEmail(String email) {
@@ -106,55 +128,16 @@ public class Login extends AppCompatActivity {
                         + "[a-zA-Z0-9][a-zA-Z0-9-]{0,25}" + ")+");
         return EMAIL_ADDRESS_PATTERN.matcher(email).matches();
     }
-    private void getData() {
-        String api = "https://837a-197-149-48-139.ngrok-free.app/user";
-        RequestQueue queue = Volley.newRequestQueue(this);
-        ArrayList<User> allUser = new ArrayList<User>();
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, api,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            JSONArray array = new JSONArray(response);
-                            for(int i =0 ; i< array.length(); i++){
-                                JSONObject simpleObject = array.getJSONObject(i);
-                                User u = new User(
-                                        simpleObject.getString("id"),
-                                        simpleObject.getString("name"),
-                                        simpleObject.getString("firstName"),
-                                        simpleObject.getString("email"),
-                                        simpleObject.getString("password")
-                                );
-                                allUser.add(u);
-                            }
-                            for(int i = 0;i< allUser.size();i++){
-                                User u = allUser.get(i);
-                                Log.e("list User", "user"+ u.getEmail());
-
-                            }
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            Log.e("api", "onResponse: "+ response.toString());
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e("api", "onErrorResponse: "+ error.getLocalizedMessage());
-            }
-        });
-        queue.add(stringRequest);
-
-    }
-    private void verifyLogin(String email, String password) {
-        String url = "https://47cf-154-126-56-74.ngrok-free.app/user/login";
-        Log.e("api", " Miditra ato  -- : "+ email+ " - "+ password);
+    private void register(User userin) {
+        String url = "https://47cf-154-126-56-74.ngrok-free.app/user/inscription";
+        Log.e("api", " Miditra ato  -- : ");
         JSONObject requestBody = new JSONObject();
         user = new User();
         try {
-            requestBody.put("email", email);
-            requestBody.put("password", password);
+            requestBody.put("name", userin.getName());
+            requestBody.put("firstName", userin.getFirstName());
+            requestBody.put("email", userin.getEmail());
+            requestBody.put("password", userin.getPassword());
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -166,17 +149,17 @@ public class Login extends AppCompatActivity {
                     public void onResponse(JSONObject  response) {
                         try{
                             Gson gson = new Gson();
-
                             user = gson.fromJson(response.toString(), User.class);
-                            Log.e("api", "Response -- : "+ user.getId());
-                            if(user.getId() == null){
-                                Toast.makeText(Login.this,"Error! please verify your email or password", Toast.LENGTH_SHORT).show();
+                            Log.e("api", "Response Inscription -- : "+ response.toString());
 
+                            if(user.getId() == null){
+                                Toast.makeText(Inscription.this,response.getString("message") , Toast.LENGTH_SHORT).show();
                             }else{
-                                Intent intent = new Intent(Login.this, MyHome.class);
+                                Intent intent = new Intent(Inscription.this, MyHome.class);
                                 startActivity(intent);
                                 finish();
                             }
+
                         }catch (Exception e){
                             e.printStackTrace();
                             Log.e("api", "error -- : "+ e.getLocalizedMessage());
