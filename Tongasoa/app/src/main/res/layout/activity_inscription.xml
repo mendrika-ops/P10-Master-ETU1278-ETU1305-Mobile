@@ -7,32 +7,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="50dp"
-            android:layout_marginBottom="50dp"
-            android:layout_marginStart="50dp"
-            android:layout_marginEnd="50dp"
-            android:gravity="center"
-            android:text="Sign up"
-            android:textAlignment="center"
-            android:textSize="35dp"
-            android:textStyle="bold" />
 
         <EditText
             android:id="@+id/name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/textView"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="100dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="10dp"
-            android:background="#30ffffff"
-            android:drawableLeft="@drawable/baseline_drive_file_rename_outline_24"
             android:drawablePadding="20dp"
             android:hint="Name"
             android:textSize="15dp"
@@ -114,7 +97,7 @@
             android:layout_below="@id/loading_spinner"
             android:layout_centerHorizontal="true"
             android:layout_margin="20dp"
-            android:backgroundTint="@color/design_default_color_secondary"
+            android:backgroundTint="@color/purple_900"
             android:text="Sign up" />
 
         <TextView

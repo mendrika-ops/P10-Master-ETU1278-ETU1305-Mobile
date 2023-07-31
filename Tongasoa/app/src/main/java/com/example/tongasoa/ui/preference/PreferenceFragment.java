@@ -11,16 +11,17 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.tongasoa.databinding.FragmentHomeBinding;
+import com.example.tongasoa.databinding.FragmentPreferenceBinding;
 
 public class PreferenceFragment extends Fragment {
-    private FragmentHomeBinding binding;
+    private FragmentPreferenceBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         PreferenceViewModel preferenceViewModel =
                 new ViewModelProvider(this).get(PreferenceViewModel.class);
 
-        binding = FragmentHomeBinding.inflate(inflater, container, false);
+        binding = FragmentPreferenceBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
         final TextView textView = binding.textHome;
