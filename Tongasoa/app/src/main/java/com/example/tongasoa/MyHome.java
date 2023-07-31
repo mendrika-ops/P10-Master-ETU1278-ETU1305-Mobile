@@ -76,9 +76,8 @@ public class MyHome extends AppCompatActivity implements NavigationView.OnNaviga
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.nav_logout) {
-            // Lorsque l'élément "nav_connexion" est cliqué, redirigez vers l'Activity "Login"
-            Intent intent = new Intent(this, Login.class);
-            startActivity(intent);
+            /*Intent intent = new Intent(this, Login.class);
+            startActivity(intent);*/
             return true;
         }else if(item.getItemId() == R.id.nav_settings) {
             Intent intent = new Intent(this, Login.class);
