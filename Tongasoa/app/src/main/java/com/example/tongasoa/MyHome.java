@@ -80,7 +80,7 @@ public class MyHome extends AppCompatActivity implements NavigationView.OnNaviga
             startActivity(intent);*/
             return true;
         }else if(item.getItemId() == R.id.nav_settings) {
-            Intent intent = new Intent(this, Login.class);
+            Intent intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);
         }else if(item.getItemId() == R.id.nav_connexion){
             if(Utils.isNetworkAvailable(this)){

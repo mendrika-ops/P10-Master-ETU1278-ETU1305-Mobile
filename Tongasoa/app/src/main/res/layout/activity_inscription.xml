@@ -6,15 +6,26 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:layout_marginStart="20dp"
+            android:gravity="center"
+            android:text="Sign in"
+            android:textAlignment="center"
+            android:textSize="35dp"
+            android:textStyle="bold" />
 
         <EditText
             android:id="@+id/name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="100dp"
+            android:layout_marginTop="50dp"
             android:layout_marginEnd="10dp"
+            android:layout_below="@+id/textView"
             android:layout_marginBottom="10dp"
             android:drawablePadding="20dp"
             android:hint="Name"
@@ -96,7 +107,9 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/loading_spinner"
             android:layout_centerHorizontal="true"
-            android:layout_margin="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
             android:backgroundTint="@color/purple_900"
             android:text="Sign up" />
 
@@ -108,6 +121,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
+            android:layout_marginTop="10dp"
 
             android:text="already have account?" />
     </RelativeLayout>
