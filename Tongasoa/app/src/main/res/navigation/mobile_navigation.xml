@@ -17,4 +17,10 @@
         android:label="@string/menu_gallery"
         tools:layout="@layout/fragment_gallery" />
 
+    <fragment
+        android:id="@+id/nav_preference"
+        android:name="com.example.tongasoa.ui.preference.PreferenceFragment"
+        android:label="@string/menu_preference"
+        tools:layout="@layout/fragment_preference" />
+
 </navigation>

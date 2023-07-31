@@ -5,16 +5,47 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_home"
+            android:id="@+id/nav_menuTheme"
             android:icon="@drawable/baseline_home_24"
-            android:title="@string/menu_home" />
+            android:title="Menu" />
         <item
-            android:id="@+id/nav_gallery"
+            android:id="@+id/nav_progression"
+            android:title="Progession" />
+        <item
+            android:id="@+id/nav_settings"
             android:icon="@drawable/baseline_settings_24"
-            android:title="@string/menu_preference" />
-        <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/baseline_output_24"
-            android:title="@string/menu_connexion" />
+            android:title="Paramètres" />
     </group>
+
+
+    <item android:title="Compte"
+        android:id="@+id/nav_compte"
+        >
+        <menu>
+            <item
+                android:id="@+id/nav_connexion"
+                android:icon="@drawable/baseline_output_24"
+                android:title="Connexion" />
+            <item
+                android:id="@+id/nav_logout"
+                android:icon="@drawable/baseline_output_24"
+                android:title="Déconnexion" />
+        </menu>
+    </item>
+
+    <!--    <group android:checkableBehavior="single">-->
+    <!--        <item-->
+    <!--            android:id="@+id/nav_home"-->
+    <!--            android:icon="@drawable/ic_menu_camera"-->
+    <!--            android:title="@string/menu_home" />-->
+    <!--        <item-->
+    <!--            android:id="@+id/nav_gallery"-->
+    <!--            android:icon="@drawable/ic_menu_gallery"-->
+    <!--            android:title="@string/menu_gallery" />-->
+    <!--        <item-->
+    <!--            android:id="@+id/nav_slideshow"-->
+    <!--            android:icon="@drawable/ic_menu_slideshow"-->
+    <!--            android:title="@string/menu_slideshow" />-->
+    <!--    </group>-->
+
 </menu>

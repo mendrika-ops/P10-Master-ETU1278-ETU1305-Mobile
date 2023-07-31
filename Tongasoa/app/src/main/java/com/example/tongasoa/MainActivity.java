@@ -2,47 +2,41 @@ package com.example.tongasoa;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.WindowManager;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.tongasoa.databinding.ActivityMainBinding;
 import com.example.tongasoa.vue.Login;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static int SPLASH_SCREEN = 5000;
-    Animation boutom, top;
-    ImageView image;
-    TextView logo,slogan;
-    ProgressBar spinner;
+    private ActivityMainBinding binding;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setContentView(R.layout.activity_main);
-        //spinner=(ProgressBar)findViewById(R.id.progressBar);
-        //spinner.setVisibility(View.GONE);
-        //spinner.setVisibility(View.VISIBLE);
-        boutom = AnimationUtils.loadAnimation(this, R.anim.animation_boutom);
-        top = AnimationUtils.loadAnimation(this, R.anim.animation_top);
+    }
 
-        //image = findViewById(R.id.imageView);
-        //slogan = findViewById(R.id.slogan);
-        //image.setAnimation(top);
-        //slogan.setAnimation(boutom);
-        new Handler().postDelayed(()-> {
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.activity_main_drawer, menu);
+        return true;
+    }
 
-            Intent intent = new Intent(MainActivity.this, Login.class);
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        int id = item.getItemId();
+        if (id == R.id.nav_menuTheme) {
+            // Lorsque l'élément "nav_connexion" est cliqué, redirigez vers l'Activity "Login"
+            Intent intent = new Intent(this, Login.class);
             startActivity(intent);
-            finish();
-        },SPLASH_SCREEN);
-
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

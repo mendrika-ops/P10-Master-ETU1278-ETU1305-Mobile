@@ -23,6 +23,7 @@ import com.android.volley.toolbox.Volley;
 import com.example.tongasoa.MyHome;
 import com.example.tongasoa.R;
 import com.example.tongasoa.modele.User;
+import com.example.tongasoa.utils.Constante;
 import com.google.android.material.button.MaterialButton;
 import com.google.gson.Gson;
 
@@ -107,7 +108,7 @@ public class Login extends AppCompatActivity {
         return EMAIL_ADDRESS_PATTERN.matcher(email).matches();
     }
     private void getData() {
-        String api = "https://837a-197-149-48-139.ngrok-free.app/user";
+        String api = Constante.BASE_URL+"user";
         RequestQueue queue = Volley.newRequestQueue(this);
         ArrayList<User> allUser = new ArrayList<User>();
         StringRequest stringRequest = new StringRequest(Request.Method.GET, api,

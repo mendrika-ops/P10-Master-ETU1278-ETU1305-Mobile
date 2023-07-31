@@ -22,6 +22,7 @@ import com.android.volley.toolbox.Volley;
 import com.example.tongasoa.MyHome;
 import com.example.tongasoa.R;
 import com.example.tongasoa.modele.User;
+import com.example.tongasoa.utils.Constante;
 import com.google.android.material.button.MaterialButton;
 import com.google.gson.Gson;
 
@@ -129,7 +130,7 @@ public class Inscription extends AppCompatActivity {
         return EMAIL_ADDRESS_PATTERN.matcher(email).matches();
     }
     private void register(User userin) {
-        String url = "https://47cf-154-126-56-74.ngrok-free.app/user/inscription";
+        String url = Constante.BASE_URL+ "inscription";
         Log.e("api", " Miditra ato  -- : ");
         JSONObject requestBody = new JSONObject();
         user = new User();
