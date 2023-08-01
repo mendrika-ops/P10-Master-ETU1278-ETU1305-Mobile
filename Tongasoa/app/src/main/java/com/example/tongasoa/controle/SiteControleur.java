@@ -61,6 +61,7 @@ public final class SiteControleur {
                         @Override
                         public void onResponse(String response) {
                             try {
+                                SiteControleur.instance.sites = new ArrayList<Site>();
                                 JSONArray array = new JSONArray(response);
                                 for(int i =0 ; i< array.length(); i++){
                                     JSONObject simpleObject = array.getJSONObject(i);
