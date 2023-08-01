@@ -5,18 +5,23 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.tongasoa.databinding.ActivityMyHomeBinding;
+import com.example.tongasoa.ui.site.Sites;
 import com.example.tongasoa.utils.Utils;
 import com.example.tongasoa.vue.Login;
 import com.google.android.material.navigation.NavigationView;
@@ -75,18 +80,35 @@ public class MyHome extends AppCompatActivity implements NavigationView.OnNaviga
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.nav_logout) {
-            /*Intent intent = new Intent(this, Login.class);
-            startActivity(intent);*/
+        if (item.getItemId() == R.id.nav_menuTheme) {
+         /*   Intent intent = new Intent(this, Sites.class);
+            startActivity(intent); */
+            // Créer une instance du Fragment "Sites"
+            Fragment sitesFragment = new Sites();
+
+            // Obtenir le gestionnaire de fragments (FragmentManager)
+            FragmentManager fragmentManager = getSupportFragmentManager();
+
+            // Commencer une transaction de fragment
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+            // Remplacer le contenu du conteneur principal par le fragment "Sites"
+            fragmentTransaction.replace(R.id.fragmentHome, sitesFragment);
+
+            // Ajouter la transaction au back stack (pour permettre le retour en arrière)
+            fragmentTransaction.addToBackStack(null);
+
+            // Confirmer la transaction
+            fragmentTransaction.commit();
             return true;
         }else if(item.getItemId() == R.id.nav_settings) {
             Intent intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);
         }else if(item.getItemId() == R.id.nav_connexion){
-            if(Utils.isNetworkAvailable(this)){
+            if (Utils.isNetworkAvailable(this)){
                 Intent intent = new Intent(this, Login.class);
                 startActivity(intent);
-            }else{
+            } else {
                 Toast.makeText(MyHome.this.getApplicationContext(), "You are not connected to the internet", Toast.LENGTH_LONG).show();
             }
 

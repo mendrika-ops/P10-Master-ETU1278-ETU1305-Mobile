@@ -146,7 +146,6 @@ public class Login extends AppCompatActivity {
             }
         });
         queue.add(stringRequest);
-
     }
     private void verifyLogin(String email, String password) {
         String url = "https://47cf-154-126-56-74.ngrok-free.app/user/login";
