@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +21,17 @@ import java.util.List;
 public class SitePage extends Fragment {
 
     private ViewPager2 viewPager2;
+    private Handler slideHandler = new Handler();
+    private long timeWaiting = 3000;
+    private Runnable sliderHandler = new Runnable() {
+        @Override
+        public void run() {
+            viewPager2.setCurrentItem(viewPager2.getCurrentItem()+1);
+            slideHandler.removeCallbacks(sliderHandler);
+            slideHandler.postDelayed(sliderHandler, timeWaiting);
+        }
+    };
+
     public SitePage() {
         // Required empty public constructor
     }
@@ -36,6 +48,9 @@ public class SitePage extends Fragment {
         slideItemList.add(new SlideItem(R.drawable.home_image1));
         slideItemList.add(new SlideItem(R.drawable.home_image2));
         viewPager2.setAdapter(new SlideAdapter(slideItemList, viewPager2));
+
+        slideHandler.removeCallbacks(sliderHandler);
+        slideHandler.postDelayed(sliderHandler, timeWaiting);
         return view;
     }
 }

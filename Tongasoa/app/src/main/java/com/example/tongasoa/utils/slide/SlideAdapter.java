@@ -17,6 +17,13 @@ public class SlideAdapter extends RecyclerView.Adapter<SlideAdapter.SlideViewHol
 
     private List<SlideItem> slideItems;
     private ViewPager2 viewPage;
+    private Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            slideItems.addAll(slideItems);
+            notifyDataSetChanged();
+        }
+    };
 
     public SlideAdapter(List<SlideItem> slideItems, ViewPager2 viewPage) {
         this.slideItems = slideItems;
@@ -38,6 +45,9 @@ public class SlideAdapter extends RecyclerView.Adapter<SlideAdapter.SlideViewHol
     @Override
     public void onBindViewHolder(@NonNull SlideViewHolder holder, int position) {
         holder.setImage(slideItems.get(position));
+        if(position == slideItems.size()-2) {
+            viewPage.post(runnable);
+        }
     }
 
     @Override
