@@ -36,23 +36,13 @@ public class SlideAdapter extends RecyclerView.Adapter<SlideAdapter.SlideViewHol
     @NonNull
     @Override
     public SlideViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        if(viewType == 1 ) {
-            return new SlideViewHolder(
-                    LayoutInflater.from(parent.getContext()).inflate(
-                            R.layout.slide_item_video,
-                            parent,
-                            false
-                    ), viewType
-            );
-        } else {
-            return new SlideViewHolder(
-                LayoutInflater.from(parent.getContext()).inflate(
-                        R.layout.slide_item_container,
-                        parent,
-                        false
-                ), viewType
-            );
-        }
+        return new SlideViewHolder(
+            LayoutInflater.from(parent.getContext()).inflate(
+                    R.layout.slide_item_container,
+                    parent,
+                    false
+            )
+        );
     }
 
     @Override
@@ -68,40 +58,17 @@ public class SlideAdapter extends RecyclerView.Adapter<SlideAdapter.SlideViewHol
         return slideItems.size();
     }
 
-    @Override
-    public int getItemViewType(int position) {
-        SlideItem slideItem = slideItems.get(position);
-        if(slideItem.getVideo() != null) {
-            return 1;
-        } else {
-            return 0;
-        }
-    }
 
     class SlideViewHolder extends RecyclerView.ViewHolder {
         private RoundedImageView imageView;
-        private WebView webView;
-        SlideViewHolder(@NonNull View itemView, int viewType) {
+        SlideViewHolder(@NonNull View itemView) {
             super(itemView);
-            if(viewType == 1 ) {
-                this.webView = itemView.findViewById(R.id.webView);
-            } else {
-                this.imageView = itemView.findViewById(R.id.imageSilde);
-            }
+            this.imageView = itemView.findViewById(R.id.imageSilde);
         }
 
         void setContenu(SlideItem slideItem) {
-            if(slideItem.getVideo() != null ){
-                // iframe is compnent HMTL on the youtube share option
-                String iframe = "<iframe width=\"100%\" height=\"100%\" src=\""+slideItem.getVideo()+"\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" allowfullscreen></iframe>";
-                webView.loadData(iframe,"text/html","utf-8");
-                webView.getSettings().setJavaScriptEnabled(true);
-                webView.setWebChromeClient(new WebChromeClient());
-            } else {
-                // If you want to display image from internet you can put code here using glide or picaso
-                imageView.setImageResource(slideItem.getImage());
-            }
-
+            // If you want to display image from internet you can put code here using glide or picaso
+            imageView.setImageResource(slideItem.getImage());
         }
     }
 }
