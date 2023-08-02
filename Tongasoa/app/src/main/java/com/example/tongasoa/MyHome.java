@@ -24,6 +24,7 @@ import com.example.tongasoa.databinding.ActivityMyHomeBinding;
 import com.example.tongasoa.ui.site.Sites;
 import com.example.tongasoa.utils.Utils;
 import com.example.tongasoa.vue.Login;
+import com.example.tongasoa.vue.SitePage;
 import com.google.android.material.navigation.NavigationView;
 
 public class MyHome extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
@@ -81,20 +82,17 @@ public class MyHome extends AppCompatActivity implements NavigationView.OnNaviga
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.nav_menuTheme) {
-         /*   Intent intent = new Intent(this, Sites.class);
-            startActivity(intent); */
-            // Créer une instance du Fragment "Sites"
-            Fragment sitesFragment = new Sites();
-
             // Obtenir le gestionnaire de fragments (FragmentManager)
             FragmentManager fragmentManager = getSupportFragmentManager();
+
+            // Créer une instance du Fragment "Sites"
+            Fragment sitesFragment = new Sites(fragmentManager);
 
             // Commencer une transaction de fragment
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
             // Remplacer le contenu du conteneur principal par le fragment "Sites"
             fragmentTransaction.replace(R.id.fragmentHome, sitesFragment);
-
             // Ajouter la transaction au back stack (pour permettre le retour en arrière)
             fragmentTransaction.addToBackStack(null);
 

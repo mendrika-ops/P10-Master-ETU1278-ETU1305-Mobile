@@ -14,15 +14,6 @@ import android.widget.TextView;
 import com.example.tongasoa.R;
 import com.example.tongasoa.modele.Site;
 public class SiteCard extends Fragment {
-/*
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";*/
-
-    // TODO: Rename and change types of parameters
- /*   private String mParam1;
-    private String mParam2;*/
     private Site site;
     private ImageView imageSite;
     private TextView nameSite;
@@ -33,10 +24,6 @@ public class SiteCard extends Fragment {
 
     public static SiteCard newInstance(Site site) {
         SiteCard fragment = new SiteCard();
-      /*  Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);*/
         fragment.site = site;
         return fragment;
     }
@@ -44,10 +31,6 @@ public class SiteCard extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        /*if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }*/
     }
 
     @Override

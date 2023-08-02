@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -24,7 +25,11 @@ public class Sites extends Fragment {
 
     private SiteControleur siteControleur;
     private RecyclerView recycler;
+    private FragmentManager fragmentManager;
 
+    public Sites(FragmentManager fragmentManager) {
+        this.fragmentManager = fragmentManager;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -74,7 +79,7 @@ public class Sites extends Fragment {
         sites.add(site8);
         sites.add(site9);
         //ListeAdapter listSite = new ListeAdapter(this.siteControleur.getSites(), this.getContext());
-        ListeAdapter listSite = new ListeAdapter(sites, this.getContext());
+        ListeAdapter listSite = new ListeAdapter(sites, this.getContext(), fragmentManager);
         recycler.setAdapter(listSite);
         listSite.notifyDataSetChanged();
     }
