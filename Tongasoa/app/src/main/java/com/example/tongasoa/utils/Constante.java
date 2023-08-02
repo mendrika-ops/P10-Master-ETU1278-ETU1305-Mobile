@@ -1,5 +1,5 @@
 package com.example.tongasoa.utils;
 
 public class Constante {
-    public static String BASE_URL = "https://af3a-197-149-36-147.ngrok-free.app/";
+    public static String BASE_URL = "https://b8aa-102-16-40-6.ngrok-free.app/";
 }

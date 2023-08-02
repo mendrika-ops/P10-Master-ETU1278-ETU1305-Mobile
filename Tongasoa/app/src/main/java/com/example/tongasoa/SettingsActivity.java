@@ -2,6 +2,7 @@ package com.example.tongasoa;
 
 import android.os.Bundle;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.tongasoa.ui.settings.SettingsFragment;
@@ -19,9 +20,10 @@ public class SettingsActivity extends AppCompatActivity {
                 .replace(android.R.id.content, new SettingsFragment())
                 .commit();
 
-        /*ActionBar menu = getSupportActionBar();
+
+        ActionBar menu = getSupportActionBar();
         menu.setDisplayShowHomeEnabled(true);
-        menu.setDisplayHomeAsUpEnabled(true);*/
+        menu.setDisplayHomeAsUpEnabled(true);
     }
 
     @Override

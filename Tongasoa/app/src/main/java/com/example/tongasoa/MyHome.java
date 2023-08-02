@@ -1,11 +1,15 @@
 package com.example.tongasoa;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -19,12 +23,14 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+import androidx.preference.PreferenceManager;
 
 import com.example.tongasoa.databinding.ActivityMyHomeBinding;
+import com.example.tongasoa.ui.settings.SettingsFragment;
 import com.example.tongasoa.ui.site.Sites;
+import com.example.tongasoa.utils.ReminderBroadcast;
 import com.example.tongasoa.utils.Utils;
 import com.example.tongasoa.vue.Login;
-import com.example.tongasoa.vue.SitePage;
 import com.google.android.material.navigation.NavigationView;
 
 public class MyHome extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
@@ -62,6 +68,20 @@ public class MyHome extends AppCompatActivity implements NavigationView.OnNaviga
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_my_home);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         //NavigationUI.setupWithNavController(navigationView, navController);
+
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+
+        this.createNotificationChannel();
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
+        boolean reminder = sharedPreferences.getBoolean("reminder", true);
+        int hourReminder = sharedPreferences.getInt("hourReminder", 8);
+        int minuteReminder = sharedPreferences.getInt("minuteReminder", 0);
+        if(reminder){
+            SettingsFragment.setupNotification(this, hourReminder, minuteReminder);
+        }
+
     }
 
 
@@ -99,7 +119,7 @@ public class MyHome extends AppCompatActivity implements NavigationView.OnNaviga
             // Confirmer la transaction
             fragmentTransaction.commit();
             return true;
-        }else if(item.getItemId() == R.id.nav_settings) {
+        }else if(item.getItemId() == R.id.nav_settings || item.getItemId() == R.id.nav_settings) {
             Intent intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);
         }else if(item.getItemId() == R.id.nav_connexion){
@@ -130,4 +150,27 @@ public class MyHome extends AppCompatActivity implements NavigationView.OnNaviga
         }
         return super.onOptionsItemSelected(item);
     }
+
+    private void createNotificationChannel() {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "LearningReminderChannel";
+            String description = "Channel for Learning Reminder";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel("notifReminder", name, importance);
+            channel.setDescription(description);
+
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+            /*NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "notifReminder")
+                    .setSmallIcon(R.drawable.logo)
+                    .setContentTitle("Titre de la notification")
+                    .setContentText("Contenu de la notification")
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+            notificationManager.notify(1, builder.build()); */
+            Intent intent = new Intent(this, ReminderBroadcast.class);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+        }
+    }
+
 }

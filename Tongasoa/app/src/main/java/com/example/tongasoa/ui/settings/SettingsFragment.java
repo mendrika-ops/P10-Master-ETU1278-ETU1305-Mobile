@@ -1,6 +1,12 @@
 package com.example.tongasoa.ui.settings;
 
+import static android.content.Context.ALARM_SERVICE;
+
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.TimePicker;
@@ -11,7 +17,9 @@ import androidx.preference.PreferenceManager;
 import androidx.preference.SwitchPreference;
 
 import com.example.tongasoa.R;
+import com.example.tongasoa.utils.ReminderBroadcast;
 
+import java.util.Calendar;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
 
@@ -70,9 +78,9 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 prefsEditor.putBoolean("reminder", reminder);
                 prefsEditor.commit();
 
-                /*if(reminder) {
+                if(reminder) {
                     setupNotification(getContext());
-                }*/
+                }
 
                 return true;
             }
@@ -96,9 +104,9 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                         prefsEditor.putInt("minuteReminder", selectedMinute);
                         prefsEditor.commit();
 
-                        /*if(reminder) {
+                        if(reminder) {
                             setupNotification(getContext());
-                        }*/
+                        }
                     }
                 };
 
@@ -112,7 +120,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         });
     }
 
-    /*public void setupNotification(Context context) {
+    public void setupNotification(Context context) {
         setupNotification(context, hourReminder, minuteReminder);
     }
 
@@ -128,7 +136,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         calendar.set(Calendar.SECOND, 0);
 
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
-    }*/
+    }
 
     private String formatTime(int time) {
         if(time < 10) return "0" + time;

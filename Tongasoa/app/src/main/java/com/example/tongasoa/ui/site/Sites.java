@@ -1,6 +1,9 @@
 package com.example.tongasoa.ui.site;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -9,17 +12,11 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
 import com.example.tongasoa.R;
 import com.example.tongasoa.controle.SiteControleur;
 import com.example.tongasoa.modele.Site;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class Sites extends Fragment {
 
@@ -59,7 +56,7 @@ public class Sites extends Fragment {
         recycler.setLayoutManager(layoutManager);
         recycler.setHasFixedSize(false);
 
-        Site site = new Site("1", "mety", "mety", "mety", "mety", "mety", null);
+        Site site = new Site("1", "Rova Manjakamiadana", "Rova Manjakamiadana", "Rova Manjakamiadana", "mety", "mety", null);
         Site site2 = new Site("2", "mety2", "mety2", "mety2", "mety2", "mety2", null);
         Site site3 = new Site("3", "mety3", "mety3", "mety3", "mety3", "mety3", null);
         Site site4 = new Site("3", "mety3", "mety3", "mety3", "mety3", "mety3", null);
