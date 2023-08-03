@@ -34,7 +34,7 @@
                 android:layout_marginLeft="15dp"/>
 
             <TextView
-                android:id="@+id/textViewDescription"
+                android:id="@+id/titleDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
@@ -44,7 +44,7 @@
                 android:paddingEnd="16dp" />
 
             <TextView
-                android:id="@+id/descriptionTextView"
+                android:id="@+id/textViewDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Your long description goes here..."
