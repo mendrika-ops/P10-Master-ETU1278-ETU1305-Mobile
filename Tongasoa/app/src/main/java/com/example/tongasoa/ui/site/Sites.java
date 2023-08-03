@@ -6,9 +6,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -18,6 +20,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.example.tongasoa.R;
 import com.example.tongasoa.controle.SiteControleur;
@@ -52,7 +55,30 @@ public class Sites extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_sites, container, false);
-        recyclerViewInitialize(view);
+        recyclerViewInitialize(view, null);
+        Context ctx = view.getContext();
+
+        // Find the SearchView in your layout
+        SearchView searchView = view.findViewById(R.id.searchView);
+
+        // Set the OnQueryTextListener for the SearchView
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                // This method will be called when the user submits the search query
+                // Here, you can perform the search operation or other tasks based on the query
+                Toast.makeText(ctx, "rechercher : " + query, Toast.LENGTH_SHORT).show();
+                recyclerViewInitialize(view, query);
+                return true; // Return true to indicate that the query has been handled
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                // This method will be called whenever the user changes the text in the search field
+                // You can perform search operations as the user types or update the search results
+                return false; // Return false to let the SearchView handle the text change
+            }
+        });
         return view;
     }
 
@@ -61,12 +87,12 @@ public class Sites extends Fragment {
         super.onViewCreated(view, savedInstanceState);
     }
 
-    private void recyclerViewInitialize(View view) {
+    private void recyclerViewInitialize(View view, String search) {
         if(this.siteControleur == null) {
             this.siteControleur = SiteControleur.getInstance(this.getContext());
         }
         queue = this.siteControleur.getRequestQueue();
-        getListeSite(this.getContext(), view);
+        getListeSite(this.getContext(), view, search);
     }
 
     /**
@@ -74,20 +100,26 @@ public class Sites extends Fragment {
      * @param ctx
      * @return ArrayList<Site>
      */
-    private void getListeSite(Context ctx, View view) {
+    private void getListeSite(Context ctx, View view, String search) {
         try {
             String api = Constante.BASE_URL+"site";
             sites = new ArrayList<Site>();
+            // Créer le requestBody que vous souhaitez envoyer (par exemple, au format JSON)
+            JSONObject requestBody = new JSONObject();
+            if (search != null ) {
+                requestBody.put("name", search);
+            }
+
             recycler = view.findViewById(R.id.recyclerview);
             GridLayoutManager layoutManager = new GridLayoutManager(this.getContext(), 2);
             recycler.setLayoutManager(layoutManager);
             recycler.setHasFixedSize(false);
-            StringRequest stringRequest = new StringRequest(Request.Method.GET, api,
-                    new Response.Listener<String>() {
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, api, requestBody,
+                    new Response.Listener<JSONObject>() {
                         @Override
-                        public void onResponse(String response) {
+                        public void onResponse(JSONObject jsonresponse) {
                             try {
-                                JSONArray array = new JSONArray(response);
+                                JSONArray array = jsonresponse.getJSONArray("rows");
                                 for(int i =0 ; i< array.length(); i++){
                                     JSONObject simpleObject = array.getJSONObject(i);
                                     Site site = new Site(
@@ -120,7 +152,6 @@ public class Sites extends Fragment {
                                 listSite.notifyDataSetChanged();
                             } catch (JSONException e) {
                                 e.printStackTrace();
-                                Log.e("api", "onResponse: "+ response.toString());
                             }
                         }
                     }, new Response.ErrorListener() {
@@ -130,7 +161,7 @@ public class Sites extends Fragment {
                 }
             });
 
-            queue.add(stringRequest);
+            queue.add(jsonObjectRequest);
         } catch (Exception ex) {
             Log.d("Error", ex.getMessage());
         }
