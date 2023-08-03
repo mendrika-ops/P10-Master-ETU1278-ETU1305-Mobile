@@ -3,6 +3,7 @@ package com.example.tongasoa.modele;
 import com.google.gson.annotations.SerializedName;
 
 import java.sql.Date;
+import java.util.ArrayList;
 
 /**
  * Class Model Site
@@ -44,6 +45,7 @@ public class Site {
     @SerializedName("Category")
     private Category category;
 
+    private ArrayList<Media> medias;
     /**
      * Constructor empty for Site
      */
@@ -69,7 +71,13 @@ public class Site {
         this.link = link;
         this.createdDate = createdDate;
     }
+    public ArrayList<Media> getMedias() {
+        return medias;
+    }
 
+    public void setMedias(ArrayList<Media> medias) {
+        this.medias = medias;
+    }
     public String getId() {
         return id;
     }

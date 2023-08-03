@@ -14,7 +14,9 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.tongasoa.R;
+import com.example.tongasoa.modele.Media;
 import com.example.tongasoa.modele.Site;
 import com.example.tongasoa.vue.SitePage;
 
@@ -44,6 +46,8 @@ public class ListeAdapter extends RecyclerView.Adapter<ListeAdapter.viewHolder>{
         Site site = this.sites.get(position);
         holder.nameSite.setText(site.getName());
         holder.imageSite.setImageResource(R.drawable.home_image2);
+        Media media = site.getMedias().get(0);
+        Glide.with(ctx).load(media.getLink()).into(holder.imageSite);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
