@@ -52,7 +52,7 @@ public class ListeAdapter extends RecyclerView.Adapter<ListeAdapter.viewHolder>{
             @Override
             public void onClick(View v) {
                 // Créer une instance du Fragment "Sites"
-                Fragment sitesFragment = new SitePage();
+                Fragment sitesFragment = new SitePage(site);
 
                 // Commencer une transaction de fragment
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

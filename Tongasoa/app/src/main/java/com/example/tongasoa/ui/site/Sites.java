@@ -1,6 +1,7 @@
 package com.example.tongasoa.ui.site;
 
 import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -57,17 +58,19 @@ public class Sites extends Fragment {
         View view = inflater.inflate(R.layout.fragment_sites, container, false);
         recyclerViewInitialize(view, null);
         Context ctx = view.getContext();
+        final String[] lasText = {""};
 
         // Find the SearchView in your layout
         SearchView searchView = view.findViewById(R.id.searchView);
-
         // Set the OnQueryTextListener for the SearchView
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
             @Override
             public boolean onQueryTextSubmit(String query) {
                 // This method will be called when the user submits the search query
                 // Here, you can perform the search operation or other tasks based on the query
                 Toast.makeText(ctx, "rechercher : " + query, Toast.LENGTH_SHORT).show();
+                lasText[0] = query;
                 recyclerViewInitialize(view, query);
                 return true; // Return true to indicate that the query has been handled
             }
@@ -76,8 +79,12 @@ public class Sites extends Fragment {
             public boolean onQueryTextChange(String newText) {
                 // This method will be called whenever the user changes the text in the search field
                 // You can perform search operations as the user types or update the search results
+                if(lasText[0] != "" && newText.isEmpty()){
+                    recyclerViewInitialize(view, null);
+                }
                 return false; // Return false to let the SearchView handle the text change
             }
+
         });
         return view;
     }
@@ -103,18 +110,23 @@ public class Sites extends Fragment {
     private void getListeSite(Context ctx, View view, String search) {
         try {
             String api = Constante.BASE_URL+"site";
+            // Créer l'objet Uri.Builder pour construire l'URL avec les paramètres
+            Uri.Builder builder = Uri.parse(api).buildUpon();
             sites = new ArrayList<Site>();
-            // Créer le requestBody que vous souhaitez envoyer (par exemple, au format JSON)
-            JSONObject requestBody = new JSONObject();
+
             if (search != null ) {
-                requestBody.put("name", search);
+                // Ajouter les paramètres à l'URL encodée
+                builder.appendQueryParameter("search", search);
             }
+
+            // Construire l'URL finale avec les paramètres
+            String urlWithParams = builder.build().toString();
 
             recycler = view.findViewById(R.id.recyclerview);
             GridLayoutManager layoutManager = new GridLayoutManager(this.getContext(), 2);
             recycler.setLayoutManager(layoutManager);
             recycler.setHasFixedSize(false);
-            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, api, requestBody,
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, urlWithParams, null,
                     new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject jsonresponse) {
