@@ -2,23 +2,23 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <PreferenceCategory
-        android:title="Générale">
+        android:title="General">
         <SwitchPreference
             android:key="sound_preference"
-            android:summary="Activer ou désactiver le son d'accueil"
-            android:title="Son" />
+            android:summary="Enable or Disable the sound"
+            android:title="Sound" />
     </PreferenceCategory>
     <PreferenceCategory
         android:title="Notifications">
         <SwitchPreference
             android:defaultValue="true"
             android:key="reminder_preference"
-            android:summary="Activer ou désactiver les notifications"
+            android:summary="Enable or Disable the notifications"
             android:title="Notifications"/>
         <Preference
             android:key="reminderHour_preference"
             android:summary="08:00"
-            android:title="Heure de rappel"/>
+            android:title="Reminder time"/>
 
     </PreferenceCategory>
 </PreferenceScreen>

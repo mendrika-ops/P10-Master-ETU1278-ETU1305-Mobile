@@ -38,7 +38,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="Description"
+                android:text="Descriptions"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp" />
@@ -53,6 +53,15 @@
                 android:paddingEnd="16dp"
                 android:layout_marginBottom="16dp" />
 
+            <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Rating"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp" />
+
             <RatingBar
                 android:id="@+id/ratingBar3"
                 android:layout_width="wrap_content"
@@ -63,7 +72,16 @@
                 android:scaleY="0.5"
                 android:progressTint="@color/yellow"
                 android:rating="3.5"
+                android:transformPivotX="0dp"
                 />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Images"
+                android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp" />
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/viewPager2"
                 android:layout_width="match_parent"
