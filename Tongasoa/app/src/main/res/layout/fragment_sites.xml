@@ -9,6 +9,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
         <!-- Barre de recherche -->
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -26,13 +27,19 @@
             </androidx.appcompat.widget.SearchView>
 
         </LinearLayout>
-
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="20dp"
             tools:listitem="@layout/fragment_site_card"
-            />
+            >
+        </androidx.recyclerview.widget.RecyclerView>
+
     </LinearLayout>
 </FrameLayout>
