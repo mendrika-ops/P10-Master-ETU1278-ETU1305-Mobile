@@ -69,6 +69,7 @@ public class MyHome extends AppCompatActivity implements NavigationView.OnNaviga
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         //NavigationUI.setupWithNavController(navigationView, navController);
 
+
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
         this.createNotificationChannel();
@@ -81,6 +82,23 @@ public class MyHome extends AppCompatActivity implements NavigationView.OnNaviga
         if(reminder){
             SettingsFragment.setupNotification(this, hourReminder, minuteReminder);
         }
+
+        // Obtenir le gestionnaire de fragments (FragmentManager)
+        FragmentManager fragmentManager = getSupportFragmentManager();
+
+        // Créer une instance du Fragment "Sites"
+        Fragment sitesFragment = new Sites(fragmentManager);
+
+        // Commencer une transaction de fragment
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+        // Remplacer le contenu du conteneur principal par le fragment "Sites"
+        fragmentTransaction.replace(R.id.fragmentHome, sitesFragment);
+        // Ajouter la transaction au back stack (pour permettre le retour en arrière)
+        fragmentTransaction.addToBackStack(null);
+
+        // Confirmer la transaction
+        fragmentTransaction.commit();
 
     }
 

@@ -10,7 +10,6 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.tongasoa.databinding.FragmentHomeBinding;
 import com.example.tongasoa.databinding.FragmentPreferenceBinding;
 
 public class PreferenceFragment extends Fragment {

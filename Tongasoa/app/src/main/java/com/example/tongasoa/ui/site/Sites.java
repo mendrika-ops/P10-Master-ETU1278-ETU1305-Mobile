@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -22,7 +23,6 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.example.tongasoa.R;
 import com.example.tongasoa.controle.SiteControleur;
 import com.example.tongasoa.modele.Category;
@@ -45,6 +45,7 @@ public class Sites extends Fragment {
     private FragmentManager fragmentManager;
 
     private RequestQueue queue;
+    ProgressBar loadingSpinner;
 
     ArrayList<Site> sites;
     public Sites(FragmentManager fragmentManager) {
@@ -56,6 +57,9 @@ public class Sites extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_sites, container, false);
+        loadingSpinner = view.findViewById(R.id.progressBar);
+        Log.println(Log.VERBOSE,"PROG", "DEPART");
+        loadingSpinner.setVisibility(View.VISIBLE);
         recyclerViewInitialize(view, null);
         Context ctx = view.getContext();
         final String[] lasText = {""};
@@ -71,6 +75,7 @@ public class Sites extends Fragment {
                 // Here, you can perform the search operation or other tasks based on the query
                 Toast.makeText(ctx, "rechercher : " + query, Toast.LENGTH_SHORT).show();
                 lasText[0] = query;
+                loadingSpinner.setVisibility(View.VISIBLE);
                 recyclerViewInitialize(view, query);
                 return true; // Return true to indicate that the query has been handled
             }
@@ -86,6 +91,7 @@ public class Sites extends Fragment {
             }
 
         });
+        Log.println(Log.VERBOSE,"PROG","INDRO ARY ");
         return view;
     }
 
@@ -162,6 +168,7 @@ public class Sites extends Fragment {
                                 ListeAdapter listSite = new ListeAdapter(sites, ctx, fragmentManager);
                                 recycler.setAdapter(listSite);
                                 listSite.notifyDataSetChanged();
+                                loadingSpinner.setVisibility(View.GONE);
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
