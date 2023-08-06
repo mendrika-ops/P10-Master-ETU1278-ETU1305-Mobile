@@ -43,14 +43,14 @@
 
                 <RatingBar
                     android:id="@+id/ratingBar3"
-                    android:layout_width="match_parent"
+                    android:layout_width="80dp"
                     android:layout_height="wrap_content"
                     android:progressTint="@color/yellow"
-                    android:numStars="0"
+                    android:numStars="5"
                     android:rating="3"
-                    android:scaleX=".3"
-                    android:scaleY=".3"
-                    android:transformPivotX="5dp"/>
+                    android:isIndicator="true"
+                    style="?android:attr/ratingBarStyleSmall"
+                    android:layout_margin="5dp"/>
 
             </LinearLayout>
 

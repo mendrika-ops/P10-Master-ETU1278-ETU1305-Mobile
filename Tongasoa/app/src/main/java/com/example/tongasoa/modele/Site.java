@@ -46,6 +46,16 @@ public class Site {
     private Category category;
 
     private ArrayList<Media> medias;
+
+    public ArrayList<Commentaire> getCommentaires() {
+        return commentaires;
+    }
+
+    public void setCommentaires(ArrayList<Commentaire> commentaires) {
+        this.commentaires = commentaires;
+    }
+
+    ArrayList<Commentaire> commentaires;
     /**
      * Constructor empty for Site
      */

@@ -26,6 +26,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.tongasoa.R;
 import com.example.tongasoa.controle.SiteControleur;
 import com.example.tongasoa.modele.Category;
+import com.example.tongasoa.modele.Commentaire;
 import com.example.tongasoa.modele.Media;
 import com.example.tongasoa.modele.Region;
 import com.example.tongasoa.modele.Site;
@@ -58,7 +59,6 @@ public class Sites extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_sites, container, false);
         loadingSpinner = view.findViewById(R.id.progressBar);
-        Log.println(Log.VERBOSE,"PROG", "DEPART");
         loadingSpinner.setVisibility(View.VISIBLE);
         recyclerViewInitialize(view, null);
         Context ctx = view.getContext();
@@ -73,7 +73,7 @@ public class Sites extends Fragment {
             public boolean onQueryTextSubmit(String query) {
                 // This method will be called when the user submits the search query
                 // Here, you can perform the search operation or other tasks based on the query
-                Toast.makeText(ctx, "rechercher : " + query, Toast.LENGTH_SHORT).show();
+                Toast.makeText(ctx, "Rechercher : '" + query+"'", Toast.LENGTH_SHORT).show();
                 lasText[0] = query;
                 loadingSpinner.setVisibility(View.VISIBLE);
                 recyclerViewInitialize(view, query);
@@ -91,7 +91,6 @@ public class Sites extends Fragment {
             }
 
         });
-        Log.println(Log.VERBOSE,"PROG","INDRO ARY ");
         return view;
     }
 
@@ -152,16 +151,25 @@ public class Sites extends Fragment {
                                     JSONObject jsonRegion = simpleObject.getJSONObject("Region");
                                     JSONObject jsonCategory = simpleObject.getJSONObject("Category");
                                     JSONArray jsonMedias = simpleObject.getJSONArray("Media");
+                                    JSONArray jsonCommentaire = simpleObject.getJSONArray("Commentaire");
                                     site.setMedias(new ArrayList<Media>());
                                     for(int ii =0 ; ii< jsonMedias.length(); ii++){
                                         JSONObject jsonMedia = jsonMedias.getJSONObject(ii);
                                         Media media = new Media(jsonMedia.getInt("id"), jsonMedia.getString("link"));
                                         site.getMedias().add(media);
                                     }
+
+                                    site.setCommentaires(new ArrayList<Commentaire>());
+                                    for(int iii =0 ; iii< jsonCommentaire.length(); iii++){
+                                        JSONObject jsonCom = jsonCommentaire.getJSONObject(iii);
+                                        Commentaire coms = new Commentaire(String.valueOf(jsonCom.getInt("id")), String.valueOf(jsonCom.getInt("idUser")), String.valueOf(jsonCom.getInt("idSite")), jsonCom.getString("commentaire"), jsonCom.getString("note"), jsonCom.getString("createDate"));
+                                        site.getCommentaires().add(coms);
+                                    }
                                     Region region = new Region(jsonRegion.getString("id"), jsonRegion.getString("idProvince"), jsonRegion.getString("name"));
                                     Category category = new Category(jsonCategory.getString("id"), jsonCategory.getString("name"));
                                     site.setRegion(region);
                                     site.setCategory(category);
+
                                     sites.add(site);
                                 }
                                 //ListeAdapter listSite = new ListeAdapter(this.siteControleur.getSites(), this.getContext());

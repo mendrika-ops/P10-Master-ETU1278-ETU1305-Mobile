@@ -10,12 +10,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:tools="http://schemas.android.com/tools"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            tools:context=".vue.SitePage">
+            tools:context=".vue.SitePage"
+            android:id="@+id/fragmentPage">
 
             <WebView
                 android:id="@+id/webView"
@@ -68,11 +68,11 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="8dp"
-                android:scaleX="0.5"
-                android:scaleY="0.5"
+                android:scaleX="0.8"
+                android:scaleY="0.8"
                 android:progressTint="@color/yellow"
                 android:rating="3.5"
-                android:transformPivotX="0dp"
+                style="?android:attr/ratingBarStyleIndicator"
                 />
             <TextView
                 android:layout_width="match_parent"
@@ -90,6 +90,58 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="5dp"
                 android:layout_marginBottom="16dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Comments"
+                android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerview2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="20dp"
+                android:clipToPadding="false"
+                android:scrollbars="vertical"
+                tools:listitem="@layout/fragment_commentaire_card"/>
+
+            <ProgressBar
+                android:id="@+id/loading_spinner"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="0dp"
+                android:visibility="gone"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <Button
+                    android:id="@+id/btncomments"
+                    android:layout_width="70dp"
+                    android:layout_height="40dp"
+                    android:text="Add"
+                    android:layout_marginTop="20dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:background="@color/colorGreen"
+                    android:textSize="10sp"/>
+
+                <EditText
+                    android:id="@+id/textcomment"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:layout_margin="20dp"
+                    android:ems="10"
+                    android:inputType="textPersonName"
+                    android:hint="Add your comment"
+                    android:layout_toStartOf="@id/btncomments"
+                    android:layout_toLeftOf="@id/btncomments" />
+            </RelativeLayout>
 
         </LinearLayout>
 
