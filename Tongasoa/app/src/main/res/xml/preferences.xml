@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <PreferenceCategory
+        android:title="General">
+        <SwitchPreference
+            android:key="sound_preference"
+            android:summary="Enable or Disable the sound"
+            android:title="Sound" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="Notifications">
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="reminder_preference"
+            android:summary="Enable or Disable the notifications"
+            android:title="Notifications"/>
+        <Preference
+            android:key="reminderHour_preference"
+            android:summary="08:00"
+            android:title="Reminder time"/>
+
+    </PreferenceCategory>
+</PreferenceScreen>
