@@ -146,6 +146,7 @@ public class Sites extends Fragment {
                                             simpleObject.getString("name"),
                                             simpleObject.getString("description"),
                                             simpleObject.getString("link"),
+                                            (float) simpleObject.getDouble("rating"),
                                             Date.valueOf(simpleObject.getString("createdDate"))
                                     );
                                     JSONObject jsonRegion = simpleObject.getJSONObject("Region");

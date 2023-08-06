@@ -44,6 +44,7 @@ public class Site {
 
     @SerializedName("Category")
     private Category category;
+    private float rating;
 
     private ArrayList<Media> medias;
 
@@ -70,15 +71,17 @@ public class Site {
      * @param name
      * @param description
      * @param link
+     * @param rating
      * @param createdDate
      */
-    public Site(String id, String idRegion, String idCategory, String name, String description, String link, Date createdDate) {
+    public Site(String id, String idRegion, String idCategory, String name, String description, String link, float rating, Date createdDate) {
         this.id = id;
         this.idRegion = idRegion;
         this.idCategory = idCategory;
         this.name = name;
         this.description = description;
         this.link = link;
+        this.rating = rating;
         this.createdDate = createdDate;
     }
     public ArrayList<Media> getMedias() {
@@ -158,5 +161,13 @@ public class Site {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public float getRating() {
+        return rating;
+    }
+
+    public void setRating(float rating) {
+        this.rating = rating;
     }
 }

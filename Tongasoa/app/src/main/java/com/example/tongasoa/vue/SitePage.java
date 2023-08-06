@@ -13,6 +13,7 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
@@ -57,6 +58,7 @@ public class SitePage extends Fragment {
     private TextView description;
 
     private TextView textcomment;
+    private RatingBar ratingBar;
 
     private long timeWaiting = 3000;
 
@@ -92,6 +94,8 @@ public class SitePage extends Fragment {
         this.viewPager2 = view.findViewById(R.id.viewPager2);
         this.nameSite = view.findViewById(R.id.textViewNameSite);
         this.description = view.findViewById(R.id.textViewDescription);
+        this.ratingBar = view.findViewById(R.id.ratingBarPage);
+        this.ratingBar.setRating(site.getRating());
         nameSite.setText(site.getName());
         description.setText(site.getDescription());
         List<SlideItem> slideItemList = new ArrayList<SlideItem>();
