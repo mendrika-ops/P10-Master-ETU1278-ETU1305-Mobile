@@ -130,7 +130,7 @@ public class Inscription extends AppCompatActivity {
         return EMAIL_ADDRESS_PATTERN.matcher(email).matches();
     }
     private void register(User userin) {
-        String url = Constante.BASE_URL+ "inscription";
+        String url = Constante.BASE_URL+ "user/inscription";
         Log.e("api", " Miditra ato  -- : ");
         JSONObject requestBody = new JSONObject();
         user = new User();
@@ -139,6 +139,7 @@ public class Inscription extends AppCompatActivity {
             requestBody.put("firstName", userin.getFirstName());
             requestBody.put("email", userin.getEmail());
             requestBody.put("password", userin.getPassword());
+
         } catch (JSONException e) {
             e.printStackTrace();
         }

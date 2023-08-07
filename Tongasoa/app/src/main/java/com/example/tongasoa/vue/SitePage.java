@@ -176,7 +176,6 @@ public class SitePage extends Fragment {
 
 
         CheckBox myCheckbox = view.findViewById(R.id.heartCheckBox);
-        myCheckbox.setChecked(true);
         if(isConnected) {
             User user = gson.fromJson(valueUser, User.class);
             for(int i=0 ;i< site.getFavoris().size();i++){

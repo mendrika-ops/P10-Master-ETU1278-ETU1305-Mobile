@@ -52,6 +52,8 @@ public class Login extends AppCompatActivity {
         MaterialButton loginbtn = (MaterialButton) findViewById(R.id.loginbtn);
         ProgressBar loadingSpinner = findViewById(R.id.loading_spinner);
 
+        email.setText("tongasoa@gmail.com");
+        password.setText("tongasoa");
         loginbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
