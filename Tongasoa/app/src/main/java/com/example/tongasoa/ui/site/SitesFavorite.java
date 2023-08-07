@@ -86,6 +86,8 @@ public class SitesFavorite extends Fragment {
     /**
      * Get Liste Site depuis le back
      * @param ctx
+     *
+     *
      * @return ArrayList<Site>
      */
     private void getListeSite(Context ctx, View view, String search) {

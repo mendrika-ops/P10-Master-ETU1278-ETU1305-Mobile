@@ -196,6 +196,8 @@ public class Sites extends Fragment {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     Log.e("api", "onErrorResponse: "+ error.getLocalizedMessage());
+                    Toast.makeText(getContext(), "you have an unstable connection, please try again", Toast.LENGTH_LONG).show();
+                    loadingSpinner.setVisibility(View.GONE);
                 }
             });
 

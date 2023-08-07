@@ -1,6 +1,7 @@
 package com.example.tongasoa.vue;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -16,10 +17,12 @@ import android.widget.CheckBox;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
@@ -41,6 +44,7 @@ import com.example.tongasoa.utils.Constante;
 import com.example.tongasoa.utils.VerticalSpaceItemDecoration;
 import com.example.tongasoa.utils.slide.SlideAdapter;
 import com.example.tongasoa.utils.slide.SlideItem;
+import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -129,6 +133,12 @@ public class SitePage extends Fragment {
         Button loginbtn = (Button) view.findViewById(R.id.btncomments);
 
         ProgressBar loadingSpinner = view.findViewById(R.id.loading_spinner);
+        Gson gson = new Gson();
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.getContext());
+        String valueUser = sharedPreferences.getString("user", null);
+        boolean checked = false;
+        boolean isConnected = (valueUser != null );
+
         loginbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -141,10 +151,17 @@ public class SitePage extends Fragment {
                     loginbtn.setEnabled(true);
                     return;
                 }
+
                 comment.setIdSite(site.getId());
-                comment.setIdUser("1");
                 comment.setCommentaire(textcomment.getText().toString());
+                comment.setIdUser("1");
                 comment.setNote("Guest :)");
+                if(isConnected){
+                    User user = gson.fromJson(valueUser, User.class);
+                    comment.setIdUser(user.getId());
+                    comment.setNote(user.getNomPrenom());
+                }
+
                 Date currentDate = new Date();
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 String formattedDate = dateFormat.format(currentDate);
@@ -159,24 +176,35 @@ public class SitePage extends Fragment {
 
 
         CheckBox myCheckbox = view.findViewById(R.id.heartCheckBox);
-        User user = new User();
-        user.setId("2");
-        boolean checked = false;
-        for(int i=0 ;i< site.getFavoris().size();i++){
-            Favoris fav = (Favoris) site.getFavoris().get(i);
-            if(Integer.parseInt(fav.getIdUser()) == Integer.parseInt(user.getId()) && fav.getEtat() == Constante.ETAT_CREER){
-                checked = true;
+        myCheckbox.setChecked(true);
+        if(isConnected) {
+            User user = gson.fromJson(valueUser, User.class);
+            for(int i=0 ;i< site.getFavoris().size();i++){
+                Favoris fav = (Favoris) site.getFavoris().get(i);
+                if(Integer.parseInt(fav.getIdUser()) == Integer.parseInt(user.getId()) && fav.getEtat() == Constante.ETAT_CREER){
+                    checked = true;
+                }
             }
-        }
-        if(checked == true){
-            myCheckbox.setChecked(true);
-        }
-        myCheckbox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if(checked == true){
+                myCheckbox.setChecked(true);
+            }
+            myCheckbox.setOnCheckedChangeListener((buttonView, isChecked) -> {
                 // Checkbox is checked, do something
                 String value = "Checkbox is checked";
                 Log.println(Log.VERBOSE, "CHECKED ", "INDROO ");
                 this.addFavoris(user);
-        });
+            });
+        }else{
+            myCheckbox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                // Checkbox is checked, do something
+                String value = "Checkbox is not checked";
+                myCheckbox.setChecked(false);
+                Toast.makeText(SitePage.this.getContext(), "Permission denied, please connect in your account", Toast.LENGTH_LONG).show();
+            });
+
+        }
+
+
         return view;
     }
 

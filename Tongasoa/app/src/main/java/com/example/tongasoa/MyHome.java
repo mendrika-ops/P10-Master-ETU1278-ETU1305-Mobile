@@ -30,6 +30,7 @@ import androidx.preference.PreferenceManager;
 
 import com.example.tongasoa.databinding.ActivityMyHomeBinding;
 import com.example.tongasoa.modele.User;
+import com.example.tongasoa.ui.about.AboutFragment;
 import com.example.tongasoa.ui.settings.SettingsFragment;
 import com.example.tongasoa.ui.site.Sites;
 import com.example.tongasoa.ui.site.SitesFavorite;
@@ -112,14 +113,12 @@ public class MyHome extends AppCompatActivity implements NavigationView.OnNaviga
         // Obtenez une référence aux SharedPreferences
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         String valueUser = sharedPreferences.getString("user", null);
-        NavigationMenuItemView itemFavorite = findViewById(R.id.nav_favorite); // Remplacez par l'ID de l'élément du menu à masquer
         NavigationMenuItemView itemLogout = findViewById(R.id.nav_logout); // Remplacez par l'ID de l'élément du menu à masquer
         NavigationMenuItemView itemLogin = findViewById(R.id.nav_connexion); // Remplacez par l'ID de l'élément du menu à masquer
         CardView avatar = findViewById(R.id.cardAvatar);
         boolean isConnected = (valueUser != null );
         itemLogin.setVisibility(isConnected ? View.GONE : View.VISIBLE);
         itemLogout.setVisibility(isConnected ? View.VISIBLE : View.GONE);
-        itemFavorite.setVisibility(isConnected ? View.VISIBLE : View.GONE);
         avatar.setVisibility(isConnected ? View.VISIBLE : View.GONE);
 
         if (isConnected) {
@@ -197,12 +196,20 @@ public class MyHome extends AppCompatActivity implements NavigationView.OnNaviga
             }
 
         } else if(item.getItemId() == R.id.nav_favorite){
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            Fragment sitesFragment = new SitesFavorite(fragmentManager);
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.fragmentHome, sitesFragment);
-            fragmentTransaction.addToBackStack(null);
-            fragmentTransaction.commit();
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+            String valueUser = sharedPreferences.getString("user", null);
+            boolean isConnected = (valueUser != null );
+            if(isConnected){
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                Fragment sitesFragment = new SitesFavorite(fragmentManager);
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.fragmentHome, sitesFragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+            }else{
+                Toast.makeText(MyHome.this.getApplicationContext(), "You need to connect as user ", Toast.LENGTH_LONG).show();
+            }
+
         }else if(item.getItemId() == R.id.nav_logout){
             // Obtenez une référence aux SharedPreferences
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -211,6 +218,24 @@ public class MyHome extends AppCompatActivity implements NavigationView.OnNaviga
             editor.remove("user");
             editor.apply();
             invalidateOptionsMenu();
+        }else if (item.getItemId() == R.id.nav_about) {
+            // Obtenir le gestionnaire de fragments (FragmentManager)
+            FragmentManager fragmentManager = getSupportFragmentManager();
+
+            // Créer une instance du Fragment "Sites"
+            Fragment sitesFragment = new AboutFragment(fragmentManager);
+
+            // Commencer une transaction de fragment
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+            // Remplacer le contenu du conteneur principal par le fragment "Sites"
+            fragmentTransaction.replace(R.id.fragmentHome, sitesFragment);
+            // Ajouter la transaction au back stack (pour permettre le retour en arrière)
+            fragmentTransaction.addToBackStack(null);
+
+            // Confirmer la transaction
+            fragmentTransaction.commit();
+            return true;
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);

@@ -74,6 +74,14 @@ public class User {
         this.password = password;
     }
 
+    public String getNomPrenom(){
+        if(this.getFirstName() == null){
+            return getName();
+        }else if(this.getName() == null){
+            return getFirstName();
+        }
+        return getFirstName() + " " + getName();
+    }
 
 
 
