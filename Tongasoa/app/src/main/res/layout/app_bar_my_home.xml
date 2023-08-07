@@ -14,9 +14,29 @@
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:background="@android:color/transparent"
             android:layout_height="?attr/actionBarSize"
-            app:popupTheme="@style/Theme.Tongasoa.PopupOverlay" />
+            android:background="@android:color/transparent"
+            app:popupTheme="@style/Theme.Tongasoa.PopupOverlay">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardAvatar"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_gravity="end"
+                android:layout_marginStart="16dp"
+                app:cardCornerRadius="20dp"
+                android:layout_marginEnd="20dp"> <!-- Adjust the corner radius as needed -->
+
+                <ImageView
+                    android:id="@+id/avatar"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/baseline_person_outline_24"/> <!-- Replace with your avatar image resource -->
+
+            </androidx.cardview.widget.CardView><!-- Replace with your avatar image resource -->
+
+        </androidx.appcompat.widget.Toolbar>
+
 
     </com.google.android.material.appbar.AppBarLayout>
 

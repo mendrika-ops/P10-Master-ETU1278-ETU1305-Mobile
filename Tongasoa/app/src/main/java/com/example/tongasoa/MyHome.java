@@ -1,5 +1,6 @@
 package com.example.tongasoa;
 
+import android.app.AlertDialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -10,10 +11,12 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
@@ -26,12 +29,17 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.preference.PreferenceManager;
 
 import com.example.tongasoa.databinding.ActivityMyHomeBinding;
+import com.example.tongasoa.modele.User;
+import com.example.tongasoa.ui.about.AboutFragment;
 import com.example.tongasoa.ui.settings.SettingsFragment;
 import com.example.tongasoa.ui.site.Sites;
+import com.example.tongasoa.ui.site.SitesFavorite;
 import com.example.tongasoa.utils.ReminderBroadcast;
 import com.example.tongasoa.utils.Utils;
 import com.example.tongasoa.vue.Login;
+import com.google.android.material.internal.NavigationMenuItemView;
 import com.google.android.material.navigation.NavigationView;
+import com.google.gson.Gson;
 
 public class MyHome extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
@@ -82,7 +90,6 @@ public class MyHome extends AppCompatActivity implements NavigationView.OnNaviga
         if(reminder){
             SettingsFragment.setupNotification(this, hourReminder, minuteReminder);
         }
-
         // Obtenir le gestionnaire de fragments (FragmentManager)
         FragmentManager fragmentManager = getSupportFragmentManager();
 
@@ -102,12 +109,51 @@ public class MyHome extends AppCompatActivity implements NavigationView.OnNaviga
 
     }
 
+    public void refreshMenu() {
+        // Obtenez une référence aux SharedPreferences
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String valueUser = sharedPreferences.getString("user", null);
+        NavigationMenuItemView itemLogout = findViewById(R.id.nav_logout); // Remplacez par l'ID de l'élément du menu à masquer
+        NavigationMenuItemView itemLogin = findViewById(R.id.nav_connexion); // Remplacez par l'ID de l'élément du menu à masquer
+        CardView avatar = findViewById(R.id.cardAvatar);
+        boolean isConnected = (valueUser != null );
+        itemLogin.setVisibility(isConnected ? View.GONE : View.VISIBLE);
+        itemLogout.setVisibility(isConnected ? View.VISIBLE : View.GONE);
+        avatar.setVisibility(isConnected ? View.VISIBLE : View.GONE);
 
+        if (isConnected) {
+            avatar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Affichez les informations de l'utilisateur connecté ici
+                    // Par exemple, afficher une boîte de dialogue ou une nouvelle activité
+
+                    Gson gson = new Gson();
+                    User user = gson.fromJson(valueUser, User.class);
+                    // Exemple de boîte de dialogue basique
+                    AlertDialog.Builder builder = new AlertDialog.Builder(MyHome.this);
+                    builder.setTitle("User Information")
+                            .setMessage("Name : " + (user.getFirstName()!=null ? user.getFirstName() : "") + " " + (user.getName()!=null ? user.getName() : "")
+                                    +"\nEmail : " + user.getEmail())
+                            .setPositiveButton("OK", null)
+                            .show();
+                }
+            });
+        }
+        invalidateOptionsMenu();
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.my_home, menu);
+        this.refreshMenu();
         return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        this.refreshMenu();
+        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
@@ -119,6 +165,7 @@ public class MyHome extends AppCompatActivity implements NavigationView.OnNaviga
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        this.refreshMenu();
         if (item.getItemId() == R.id.nav_menuTheme) {
             // Obtenir le gestionnaire de fragments (FragmentManager)
             FragmentManager fragmentManager = getSupportFragmentManager();
@@ -148,6 +195,47 @@ public class MyHome extends AppCompatActivity implements NavigationView.OnNaviga
                 Toast.makeText(MyHome.this.getApplicationContext(), "You are not connected to the internet", Toast.LENGTH_LONG).show();
             }
 
+        } else if(item.getItemId() == R.id.nav_favorite){
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+            String valueUser = sharedPreferences.getString("user", null);
+            boolean isConnected = (valueUser != null );
+            if(isConnected){
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                Fragment sitesFragment = new SitesFavorite(fragmentManager);
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.fragmentHome, sitesFragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+            }else{
+                Toast.makeText(MyHome.this.getApplicationContext(), "You need to connect as user ", Toast.LENGTH_LONG).show();
+            }
+
+        }else if(item.getItemId() == R.id.nav_logout){
+            // Obtenez une référence aux SharedPreferences
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+            // Éditez les SharedPreferences pour supprimer un élément
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.remove("user");
+            editor.apply();
+            invalidateOptionsMenu();
+        }else if (item.getItemId() == R.id.nav_about) {
+            // Obtenir le gestionnaire de fragments (FragmentManager)
+            FragmentManager fragmentManager = getSupportFragmentManager();
+
+            // Créer une instance du Fragment "Sites"
+            Fragment sitesFragment = new AboutFragment(fragmentManager);
+
+            // Commencer une transaction de fragment
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+            // Remplacer le contenu du conteneur principal par le fragment "Sites"
+            fragmentTransaction.replace(R.id.fragmentHome, sitesFragment);
+            // Ajouter la transaction au back stack (pour permettre le retour en arrière)
+            fragmentTransaction.addToBackStack(null);
+
+            // Confirmer la transaction
+            fragmentTransaction.commit();
+            return true;
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -160,6 +248,7 @@ public class MyHome extends AppCompatActivity implements NavigationView.OnNaviga
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         Log.println(Log.VERBOSE,"LOG CLICK" , "--------indroo ");
         int id = item.getItemId();
+        this.refreshMenu();
         if (id == R.id.nav_menuTheme) {
             // Lorsque l'élément "nav_connexion" est cliqué, redirigez vers l'Activity "Login"
             Intent intent = new Intent(this, Login.class);

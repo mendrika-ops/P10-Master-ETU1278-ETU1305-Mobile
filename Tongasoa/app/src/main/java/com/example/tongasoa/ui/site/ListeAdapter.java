@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -46,6 +47,8 @@ public class ListeAdapter extends RecyclerView.Adapter<ListeAdapter.viewHolder>{
         Site site = this.sites.get(position);
         holder.nameSite.setText(site.getName());
         holder.imageSite.setImageResource(R.drawable.home_image2);
+        holder.ratingBar.setRating(site.getRating());
+        holder.reaction.setText("("+String.valueOf(site.getFavoris().size())+")");
         Media media = site.getMedias().get(0);
         Glide.with(ctx).load(media.getLink()).into(holder.imageSite);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -76,11 +79,14 @@ public class ListeAdapter extends RecyclerView.Adapter<ListeAdapter.viewHolder>{
     public class viewHolder extends RecyclerView.ViewHolder{
         ImageView imageSite;
         TextView nameSite;
-
+        RatingBar ratingBar;
+        TextView reaction;
         public viewHolder(@NonNull View itemView) {
             super(itemView);
             imageSite = itemView.findViewById(R.id.imageSite);
             nameSite = itemView.findViewById(R.id.nameSite);
+            ratingBar = itemView.findViewById(R.id.ratingBar3);
+            reaction = itemView.findViewById(R.id.reaction);
         }
     }
 }

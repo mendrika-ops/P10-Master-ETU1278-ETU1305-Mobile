@@ -1,6 +1,7 @@
 package com.example.tongasoa.ui.site;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,13 +9,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -31,7 +31,9 @@ import com.example.tongasoa.modele.Favoris;
 import com.example.tongasoa.modele.Media;
 import com.example.tongasoa.modele.Region;
 import com.example.tongasoa.modele.Site;
+import com.example.tongasoa.modele.User;
 import com.example.tongasoa.utils.Constante;
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -40,17 +42,16 @@ import org.json.JSONObject;
 import java.sql.Date;
 import java.util.ArrayList;
 
-public class Sites extends Fragment {
-
+public class SitesFavorite extends Fragment {
     private SiteControleur siteControleur;
     private RecyclerView recycler;
     private FragmentManager fragmentManager;
 
     private RequestQueue queue;
     ProgressBar loadingSpinner;
-
+    private User user;
     ArrayList<Site> sites;
-    public Sites(FragmentManager fragmentManager) {
+    public SitesFavorite(FragmentManager fragmentManager) {
         this.fragmentManager = fragmentManager;
     }
 
@@ -58,40 +59,14 @@ public class Sites extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_sites, container, false);
+        View view = inflater.inflate(R.layout.fragment_favorite, container, false);
         loadingSpinner = view.findViewById(R.id.progressBar);
         loadingSpinner.setVisibility(View.VISIBLE);
         recyclerViewInitialize(view, null);
+        user = new User();
+        user.setId("2");
         Context ctx = view.getContext();
         final String[] lasText = {""};
-
-        // Find the SearchView in your layout
-        SearchView searchView = view.findViewById(R.id.searchView);
-        // Set the OnQueryTextListener for the SearchView
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                // This method will be called when the user submits the search query
-                // Here, you can perform the search operation or other tasks based on the query
-                Toast.makeText(ctx, "Rechercher : '" + query+"'", Toast.LENGTH_SHORT).show();
-                lasText[0] = query;
-                loadingSpinner.setVisibility(View.VISIBLE);
-                recyclerViewInitialize(view, query);
-                return true; // Return true to indicate that the query has been handled
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                // This method will be called whenever the user changes the text in the search field
-                // You can perform search operations as the user types or update the search results
-                if(lasText[0] != "" && newText.isEmpty()){
-                    recyclerViewInitialize(view, null);
-                }
-                return false; // Return false to let the SearchView handle the text change
-            }
-
-        });
         return view;
     }
 
@@ -111,23 +86,24 @@ public class Sites extends Fragment {
     /**
      * Get Liste Site depuis le back
      * @param ctx
+     *
+     *
      * @return ArrayList<Site>
      */
     private void getListeSite(Context ctx, View view, String search) {
         try {
-            String api = Constante.BASE_URL+"site";
+            String api = Constante.BASE_URL+"site/myfavorite";
+            sites = new ArrayList<Site>();
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(ctx);
+            String valueUser = sharedPreferences.getString("user", null);
+            Gson gson = new Gson();
+            User user = gson.fromJson(valueUser, User.class);
             // Créer l'objet Uri.Builder pour construire l'URL avec les paramètres
             Uri.Builder builder = Uri.parse(api).buildUpon();
-            sites = new ArrayList<Site>();
-
-            if (search != null ) {
-                // Ajouter les paramètres à l'URL encodée
-                builder.appendQueryParameter("search", search);
-            }
-
+            // Ajouter les paramètres à l'URL encodée
+            builder.appendQueryParameter("idUser", user.getId());
             // Construire l'URL finale avec les paramètres
             String urlWithParams = builder.build().toString();
-
             recycler = view.findViewById(R.id.recyclerview);
             GridLayoutManager layoutManager = new GridLayoutManager(this.getContext(), 2);
             recycler.setLayoutManager(layoutManager);
@@ -196,8 +172,6 @@ public class Sites extends Fragment {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     Log.e("api", "onErrorResponse: "+ error.getLocalizedMessage());
-                    Toast.makeText(getContext(), "you have an unstable connection, please try again", Toast.LENGTH_LONG).show();
-                    loadingSpinner.setVisibility(View.GONE);
                 }
             });
 

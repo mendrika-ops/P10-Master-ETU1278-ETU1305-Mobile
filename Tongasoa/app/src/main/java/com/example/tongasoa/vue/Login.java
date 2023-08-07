@@ -1,6 +1,7 @@
 package com.example.tongasoa.vue;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.PreferenceManager;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -50,13 +52,15 @@ public class Login extends AppCompatActivity {
         MaterialButton loginbtn = (MaterialButton) findViewById(R.id.loginbtn);
         ProgressBar loadingSpinner = findViewById(R.id.loading_spinner);
 
+        email.setText("tongasoa@gmail.com");
+        password.setText("tongasoa");
         loginbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                     loadingSpinner.setVisibility(View.VISIBLE);
                     loginbtn.setEnabled(false);
 
-                    if(TextUtils.isEmpty(email.getText().toString())|| !checkEmail(email.getText().toString())){
+                    if(TextUtils.isEmpty(email.getText().toString()) || !checkEmail(email.getText().toString())){
                         email.setError("Email required");
                         loadingSpinner.setVisibility(View.GONE);
                         loginbtn.setEnabled(true);
@@ -148,7 +152,7 @@ public class Login extends AppCompatActivity {
         queue.add(stringRequest);
     }
     private void verifyLogin(String email, String password) {
-        String url = "https://47cf-154-126-56-74.ngrok-free.app/user/login";
+        String url = Constante.BASE_URL + "user/login";
         Log.e("api", " Miditra ato  -- : "+ email+ " - "+ password);
         JSONObject requestBody = new JSONObject();
         user = new User();
@@ -173,6 +177,16 @@ public class Login extends AppCompatActivity {
                                 Toast.makeText(Login.this,"Error! please verify your email or password", Toast.LENGTH_SHORT).show();
 
                             }else{
+
+                                // Obtenez une référence aux SharedPreferences
+                                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Login.this);
+
+                                // Éditez les SharedPreferences pour ajouter le token
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                editor.putString("user", response.toString());
+                                editor.apply();
+                                invalidateOptionsMenu();
+
                                 Intent intent = new Intent(Login.this, MyHome.class);
                                 startActivity(intent);
                                 finish();

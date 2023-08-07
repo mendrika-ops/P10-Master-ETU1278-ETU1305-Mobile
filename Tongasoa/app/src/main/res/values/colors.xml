@@ -10,4 +10,8 @@
     <color name="white">#FFFFFFFF</color>
     <color name="yellow">#FFD700</color>
     <color name="colorGreen">#00FF00</color>
+    <color name="red">#F44336</color>
+    <color name="toolbar_start_color">#00000000</color>
+    <color name="toolbar_center_color">#FFFFFFFF</color>
+    <color name="toolbar_end_color">#FFFFFFFF</color>
 </resources>
