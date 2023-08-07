@@ -141,6 +141,7 @@ public class MyHome extends AppCompatActivity implements NavigationView.OnNaviga
                 }
             });
         }
+        invalidateOptionsMenu();
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
