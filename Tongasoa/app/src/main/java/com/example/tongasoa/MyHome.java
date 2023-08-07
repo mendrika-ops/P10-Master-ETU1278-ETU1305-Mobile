@@ -10,10 +10,12 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
@@ -32,6 +34,7 @@ import com.example.tongasoa.ui.site.SitesFavorite;
 import com.example.tongasoa.utils.ReminderBroadcast;
 import com.example.tongasoa.utils.Utils;
 import com.example.tongasoa.vue.Login;
+import com.google.android.material.internal.NavigationMenuItemView;
 import com.google.android.material.navigation.NavigationView;
 
 public class MyHome extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
@@ -112,6 +115,21 @@ public class MyHome extends AppCompatActivity implements NavigationView.OnNaviga
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        // Obtenez une référence aux SharedPreferences
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String valueUser = sharedPreferences.getString("user", null);
+        NavigationMenuItemView itemLogout = findViewById(R.id.nav_logout); // Remplacez par l'ID de l'élément du menu à masquer
+        NavigationMenuItemView itemLogin = findViewById(R.id.nav_connexion); // Remplacez par l'ID de l'élément du menu à masquer
+        CardView avatar = findViewById(R.id.cardAvatar);
+        boolean isConnected = (valueUser != null );
+        itemLogin.setVisibility(isConnected ? View.GONE : View.VISIBLE);
+        itemLogout.setVisibility(isConnected ? View.VISIBLE : View.GONE);
+        avatar.setVisibility(isConnected ? View.VISIBLE : View.GONE);
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onSupportNavigateUp() {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_my_home);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
@@ -156,6 +174,14 @@ public class MyHome extends AppCompatActivity implements NavigationView.OnNaviga
             fragmentTransaction.replace(R.id.fragmentHome, sitesFragment);
             fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
+        }else if(item.getItemId() == R.id.nav_logout){
+            // Obtenez une référence aux SharedPreferences
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+            // Éditez les SharedPreferences pour supprimer un élément
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.remove("user");
+            editor.apply();
+            invalidateOptionsMenu();
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
