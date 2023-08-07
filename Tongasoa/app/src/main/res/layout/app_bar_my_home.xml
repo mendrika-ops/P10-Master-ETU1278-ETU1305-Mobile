@@ -30,7 +30,7 @@
                     android:id="@+id/avatar"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:src="@drawable/logo" /> <!-- Replace with your avatar image resource -->
+                    android:src="@drawable/baseline_person_outline_24" /> <!-- Replace with your avatar image resource -->
 
             </androidx.cardview.widget.CardView><!-- Replace with your avatar image resource -->
 
