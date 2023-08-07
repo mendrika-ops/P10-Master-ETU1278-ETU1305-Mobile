@@ -126,7 +126,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
     public static void setupNotification(Context context, int hour, int minute) {
         Intent intent = new Intent(context, ReminderBroadcast.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_IMMUTABLE );
 
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
 
