@@ -48,6 +48,7 @@ public class Site {
 
     private ArrayList<Media> medias;
 
+    ArrayList<Favoris> favoris;
     public ArrayList<Commentaire> getCommentaires() {
         return commentaires;
     }
@@ -169,5 +170,13 @@ public class Site {
 
     public void setRating(float rating) {
         this.rating = rating;
+    }
+
+    public ArrayList<Favoris> getFavoris() {
+        return favoris;
+    }
+
+    public void setFavoris(ArrayList<Favoris> favoris) {
+        this.favoris = favoris;
     }
 }

@@ -3,47 +3,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.site.Sites">
+    tools:context=".ui.site.SitesFavorite">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
         <!-- Barre de recherche -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Search"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp" />
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <androidx.appcompat.widget.SearchView
-                android:id="@+id/searchView"
-                android:layout_width="0dp"
-                android:layout_height="50dp"
-                android:layout_weight="1"
-                android:elevation="4dp"
-                android:iconifiedByDefault="true"
-                android:queryHint="Rechercher...">
-
-            </androidx.appcompat.widget.SearchView>
-
-        </LinearLayout>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="My Tourist Attractions"
+            android:text="My Favorite"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
             android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:gravity="center"/>
+            android:paddingEnd="16dp" />
         <ProgressBar
             android:id="@+id/progressBar"
             style="?android:attr/progressBarStyle"

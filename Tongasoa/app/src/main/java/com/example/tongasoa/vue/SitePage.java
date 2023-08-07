@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -31,6 +32,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.tongasoa.R;
 import com.example.tongasoa.modele.Commentaire;
+import com.example.tongasoa.modele.Favoris;
 import com.example.tongasoa.modele.Media;
 import com.example.tongasoa.modele.Site;
 import com.example.tongasoa.modele.User;
@@ -58,6 +60,8 @@ public class SitePage extends Fragment {
     private TextView description;
 
     private TextView textcomment;
+
+    private TextView reaction;
     private RatingBar ratingBar;
 
     private long timeWaiting = 3000;
@@ -95,7 +99,9 @@ public class SitePage extends Fragment {
         this.nameSite = view.findViewById(R.id.textViewNameSite);
         this.description = view.findViewById(R.id.textViewDescription);
         this.ratingBar = view.findViewById(R.id.ratingBarPage);
+        this.reaction  = view.findViewById(R.id.reaction);
         this.ratingBar.setRating(site.getRating());
+        reaction.setText("("+String.valueOf(site.getFavoris().size())+")");
         nameSite.setText(site.getName());
         description.setText(site.getDescription());
         List<SlideItem> slideItemList = new ArrayList<SlideItem>();
@@ -148,6 +154,28 @@ public class SitePage extends Fragment {
                 loadingSpinner.setVisibility(View.GONE);
                 loginbtn.setEnabled(true);
             }
+        });
+
+
+
+        CheckBox myCheckbox = view.findViewById(R.id.heartCheckBox);
+        User user = new User();
+        user.setId("2");
+        boolean checked = false;
+        for(int i=0 ;i< site.getFavoris().size();i++){
+            Favoris fav = (Favoris) site.getFavoris().get(i);
+            if(Integer.parseInt(fav.getIdUser()) == Integer.parseInt(user.getId()) && fav.getEtat() == Constante.ETAT_CREER){
+                checked = true;
+            }
+        }
+        if(checked == true){
+            myCheckbox.setChecked(true);
+        }
+        myCheckbox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                // Checkbox is checked, do something
+                String value = "Checkbox is checked";
+                Log.println(Log.VERBOSE, "CHECKED ", "INDROO ");
+                this.addFavoris(user);
         });
         return view;
     }
@@ -207,6 +235,51 @@ public class SitePage extends Fragment {
                         try{
                             Log.println(Log.VERBOSE, "CREATE COMMENTS", response.toString());
                             site.getCommentaires().add(com);
+                            Fragment sitesFragment = new SitePage(site);
+                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                            fragmentTransaction.detach(sitesFragment);
+                            fragmentTransaction.attach(sitesFragment);
+                            fragmentTransaction.commit();
+                        }catch (Exception e){
+                            e.printStackTrace();
+                            Log.e("API create comments", "ERROR : "+ e.getMessage());
+
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("api", "onErrorResponse: "+ error.getLocalizedMessage());
+            }
+        });
+        queue.add(jsonObjectRequest);
+    }
+
+    private void addFavoris(User user) {
+        String url = Constante.BASE_URL+ "site/addFavoris";
+        JSONObject requestBody = new JSONObject();
+        try {
+            Date currentDate = new Date();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String formattedDate = dateFormat.format(currentDate);
+            requestBody.put("idSite", site.getId());
+            requestBody.put("idUser", user.getId());
+            requestBody.put("description", "added");
+            requestBody.put("etat", Constante.ETAT_CREER);
+            requestBody.put("createDate", formattedDate);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        RequestQueue queue = Volley.newRequestQueue(this.getContext());
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, requestBody,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject  response) {
+                        try{
+                            Log.println(Log.VERBOSE, "CREATE FAVORIS", response.toString());
+                            site.getFavoris().add(new Favoris());
                             Fragment sitesFragment = new SitePage(site);
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                             fragmentTransaction.detach(sitesFragment);

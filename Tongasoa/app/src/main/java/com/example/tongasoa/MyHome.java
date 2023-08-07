@@ -28,6 +28,7 @@ import androidx.preference.PreferenceManager;
 import com.example.tongasoa.databinding.ActivityMyHomeBinding;
 import com.example.tongasoa.ui.settings.SettingsFragment;
 import com.example.tongasoa.ui.site.Sites;
+import com.example.tongasoa.ui.site.SitesFavorite;
 import com.example.tongasoa.utils.ReminderBroadcast;
 import com.example.tongasoa.utils.Utils;
 import com.example.tongasoa.vue.Login;
@@ -148,6 +149,13 @@ public class MyHome extends AppCompatActivity implements NavigationView.OnNaviga
                 Toast.makeText(MyHome.this.getApplicationContext(), "You are not connected to the internet", Toast.LENGTH_LONG).show();
             }
 
+        } else if(item.getItemId() == R.id.nav_favorite){
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            Fragment sitesFragment = new SitesFavorite(fragmentManager);
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.fragmentHome, sitesFragment);
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
