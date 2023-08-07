@@ -1,6 +1,8 @@
 package com.example.tongasoa.ui.site;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -30,6 +33,7 @@ import com.example.tongasoa.modele.Region;
 import com.example.tongasoa.modele.Site;
 import com.example.tongasoa.modele.User;
 import com.example.tongasoa.utils.Constante;
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -88,13 +92,21 @@ public class SitesFavorite extends Fragment {
         try {
             String api = Constante.BASE_URL+"site/myfavorite";
             sites = new ArrayList<Site>();
-            JSONObject requestBody = new JSONObject();
-            requestBody.put("idUser", 2);
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(ctx);
+            String valueUser = sharedPreferences.getString("user", null);
+            Gson gson = new Gson();
+            User user = gson.fromJson(valueUser, User.class);
+            // Créer l'objet Uri.Builder pour construire l'URL avec les paramètres
+            Uri.Builder builder = Uri.parse(api).buildUpon();
+            // Ajouter les paramètres à l'URL encodée
+            builder.appendQueryParameter("idUser", user.getId());
+            // Construire l'URL finale avec les paramètres
+            String urlWithParams = builder.build().toString();
             recycler = view.findViewById(R.id.recyclerview);
             GridLayoutManager layoutManager = new GridLayoutManager(this.getContext(), 2);
             recycler.setLayoutManager(layoutManager);
             recycler.setHasFixedSize(false);
-            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, api, requestBody,
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, urlWithParams, null,
                     new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject jsonresponse) {

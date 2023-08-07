@@ -119,12 +119,14 @@ public class MyHome extends AppCompatActivity implements NavigationView.OnNaviga
         // Obtenez une référence aux SharedPreferences
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         String valueUser = sharedPreferences.getString("user", null);
+        NavigationMenuItemView itemFavorite = findViewById(R.id.nav_favorite); // Remplacez par l'ID de l'élément du menu à masquer
         NavigationMenuItemView itemLogout = findViewById(R.id.nav_logout); // Remplacez par l'ID de l'élément du menu à masquer
         NavigationMenuItemView itemLogin = findViewById(R.id.nav_connexion); // Remplacez par l'ID de l'élément du menu à masquer
         CardView avatar = findViewById(R.id.cardAvatar);
         boolean isConnected = (valueUser != null );
         itemLogin.setVisibility(isConnected ? View.GONE : View.VISIBLE);
         itemLogout.setVisibility(isConnected ? View.VISIBLE : View.GONE);
+        itemFavorite.setVisibility(isConnected ? View.VISIBLE : View.GONE);
         avatar.setVisibility(isConnected ? View.VISIBLE : View.GONE);
         return super.onPrepareOptionsMenu(menu);
     }
