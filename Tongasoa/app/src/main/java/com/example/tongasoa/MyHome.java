@@ -1,5 +1,6 @@
 package com.example.tongasoa;
 
+import android.app.AlertDialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -28,6 +29,7 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.preference.PreferenceManager;
 
 import com.example.tongasoa.databinding.ActivityMyHomeBinding;
+import com.example.tongasoa.modele.User;
 import com.example.tongasoa.ui.settings.SettingsFragment;
 import com.example.tongasoa.ui.site.Sites;
 import com.example.tongasoa.ui.site.SitesFavorite;
@@ -36,6 +38,7 @@ import com.example.tongasoa.utils.Utils;
 import com.example.tongasoa.vue.Login;
 import com.google.android.material.internal.NavigationMenuItemView;
 import com.google.android.material.navigation.NavigationView;
+import com.google.gson.Gson;
 
 public class MyHome extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
@@ -86,7 +89,6 @@ public class MyHome extends AppCompatActivity implements NavigationView.OnNaviga
         if(reminder){
             SettingsFragment.setupNotification(this, hourReminder, minuteReminder);
         }
-
         // Obtenir le gestionnaire de fragments (FragmentManager)
         FragmentManager fragmentManager = getSupportFragmentManager();
 
@@ -106,16 +108,7 @@ public class MyHome extends AppCompatActivity implements NavigationView.OnNaviga
 
     }
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.my_home, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
+    public void refreshMenu() {
         // Obtenez une référence aux SharedPreferences
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         String valueUser = sharedPreferences.getString("user", null);
@@ -128,6 +121,38 @@ public class MyHome extends AppCompatActivity implements NavigationView.OnNaviga
         itemLogout.setVisibility(isConnected ? View.VISIBLE : View.GONE);
         itemFavorite.setVisibility(isConnected ? View.VISIBLE : View.GONE);
         avatar.setVisibility(isConnected ? View.VISIBLE : View.GONE);
+
+        if (isConnected) {
+            avatar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Affichez les informations de l'utilisateur connecté ici
+                    // Par exemple, afficher une boîte de dialogue ou une nouvelle activité
+
+                    Gson gson = new Gson();
+                    User user = gson.fromJson(valueUser, User.class);
+                    // Exemple de boîte de dialogue basique
+                    AlertDialog.Builder builder = new AlertDialog.Builder(MyHome.this);
+                    builder.setTitle("User Information")
+                            .setMessage("Name : " + (user.getFirstName()!=null ? user.getFirstName() : "") + " " + (user.getName()!=null ? user.getName() : "")
+                                    +"\nEmail : " + user.getEmail())
+                            .setPositiveButton("OK", null)
+                            .show();
+                }
+            });
+        }
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.my_home, menu);
+        this.refreshMenu();
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        this.refreshMenu();
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -140,6 +165,7 @@ public class MyHome extends AppCompatActivity implements NavigationView.OnNaviga
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        this.refreshMenu();
         if (item.getItemId() == R.id.nav_menuTheme) {
             // Obtenir le gestionnaire de fragments (FragmentManager)
             FragmentManager fragmentManager = getSupportFragmentManager();
@@ -196,6 +222,7 @@ public class MyHome extends AppCompatActivity implements NavigationView.OnNaviga
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         Log.println(Log.VERBOSE,"LOG CLICK" , "--------indroo ");
         int id = item.getItemId();
+        this.refreshMenu();
         if (id == R.id.nav_menuTheme) {
             // Lorsque l'élément "nav_connexion" est cliqué, redirigez vers l'Activity "Login"
             Intent intent = new Intent(this, Login.class);
